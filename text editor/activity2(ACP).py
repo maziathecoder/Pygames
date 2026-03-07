@@ -7,31 +7,23 @@ def calculate_interest():
         principal = float(entry_principal.get())
         time = float(entry_time.get())
         rate = float(entry_rate.get())
-
-        # Simple Interest
         simple_interest = (principal * rate * time) / 100
-
-        # Compound Interest
         compound_interest = principal * ((1 + rate/100) ** time) - principal
 
-        # Display results
         label_si_result.config(text=f"Simple Interest: {simple_interest:.2f}")
         label_ci_result.config(text=f"Compound Interest: {compound_interest:.2f}")
 
     except ValueError:
         messagebox.showerror("Input Error", "Please enter valid numbers!")
 
-# Main window
 root = tk.Tk()
 root.title("Age Calculator App")
 root.geometry("400x400")
 root.configure(bg="#f2f2f2")
 
-# Heading
 heading = tk.Label(root, text="Interest Calculator", font=("Arial", 16, "bold"), bg="#f2f2f2")
 heading.pack(pady=10)
 
-# Description label
 description = tk.Label(
     root,
     text="Enter Principal, Time (years) and Rate (%)\nto calculate Simple and Compound Interest",
@@ -39,41 +31,34 @@ description = tk.Label(
 )
 description.pack(pady=5)
 
-# Frame for inputs
 frame = tk.Frame(root, bg="#f2f2f2")
 frame.pack(pady=15)
 
-# Principal
 label_principal = tk.Label(frame, text="Principal:", bg="#f2f2f2")
 label_principal.grid(row=0, column=0, padx=10, pady=5)
 
 entry_principal = tk.Entry(frame)
 entry_principal.grid(row=0, column=1, padx=10, pady=5)
 
-# Time
 label_time = tk.Label(frame, text="Time (years):", bg="#f2f2f2")
 label_time.grid(row=1, column=0, padx=10, pady=5)
 
 entry_time = tk.Entry(frame)
 entry_time.grid(row=1, column=1, padx=10, pady=5)
 
-# Rate
 label_rate = tk.Label(frame, text="Rate (%):", bg="#f2f2f2")
 label_rate.grid(row=2, column=0, padx=10, pady=5)
 
 entry_rate = tk.Entry(frame)
 entry_rate.grid(row=2, column=1, padx=10, pady=5)
 
-# Calculate button
 calculate_btn = tk.Button(root, text="Calculate Interest", command=calculate_interest, bg="#4CAF50", fg="white")
 calculate_btn.pack(pady=10)
 
-# Result labels
 label_si_result = tk.Label(root, text="Simple Interest: ", font=("Arial", 11), bg="#f2f2f2")
 label_si_result.pack(pady=5)
 
 label_ci_result = tk.Label(root, text="Compound Interest: ", font=("Arial", 11), bg="#f2f2f2")
 label_ci_result.pack(pady=5)
 
-# Run application
 root.mainloop()
