@@ -1,79 +1,57 @@
-import tkinter as tk
-from tkinter import messagebox
+# Import necessary packages 
+from tkinter import *
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 
-# Function to calculate interests
-def calculate_interest():
-    try:
-        principal = float(entry_principal.get())
-        time = float(entry_time.get())
-        rate = float(entry_rate.get())
+# Setup Root Window
+window = Tk()
+window.title("Codingal's Text Editor")
+window.geometry("600x500")
+window.rowconfigure(0, minsize=800, weight=1)
+window.columnconfigure(1, minsize=800, weight=1)
 
-        # Simple Interest
-        simple_interest = (principal * rate * time) / 100
+# Function to Open a file
+def open_file():
+	"""Open a file for editing."""
+	filepath = askopenfilename(
+		filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")]
+	)
+	if not filepath:
+		return
+	txt_edit.delete(1.0, END)
+	# if a file is opened then display the contents of the file
+	with open(filepath, "r") as input_file:
+		# Read contents of the input file
+		text = input_file.read()
+		# Insert contents of the file in the editor box
+		txt_edit.insert(END, text)
+		input_file.close()
+	window.title(f"Codingal's Text Editor - {filepath}")
 
-        # Compound Interest
-        compound_interest = principal * ((1 + rate/100) ** time) - principal
+# Function to Save a file
+def save_file():
+	# Save the current file as a new file
+	filepath = asksaveasfilename(
+		defaultextension="txt",
+		filetypes=[("Text Files", "*.txt"), ("All Files", "*.*")],
+	)
+	if not filepath:
+		return
+	with open(filepath, "w") as output_file:
+		# Read the edited content and update in the output file
+		text = txt_edit.get(1.0, END)
+		output_file.write(text)
+	window.title(f"Codingal's Text Editor - {filepath}")
 
-        # Display results
-        label_si_result.config(text=f"Simple Interest: {simple_interest:.2f}")
-        label_ci_result.config(text=f"Compound Interest: {compound_interest:.2f}")
+# Add widgets in the application
+txt_edit = Text(window)
+fr_buttons = Frame(window, relief=RAISED, bd=2)
+btn_open = Button(fr_buttons, text="Open", command=open_file)
+btn_save = Button(fr_buttons, text="Save As...", command=save_file)
 
-    except ValueError:
-        messagebox.showerror("Input Error", "Please enter valid numbers!")
+btn_open.grid(row=0, column=0, sticky="ew", padx=5, pady=5)
+btn_save.grid(row=1, column=0, sticky="ew", padx=5)
 
-# Main window
-root = tk.Tk()
-root.title("Age Calculator App")
-root.geometry("400x400")
-root.configure(bg="#f2f2f2")
+fr_buttons.grid(row=0, column=0, sticky="ns")
+txt_edit.grid(row=0, column=1, sticky="nsew")
 
-# Heading
-heading = tk.Label(root, text="Interest Calculator", font=("Arial", 16, "bold"), bg="#f2f2f2")
-heading.pack(pady=10)
-
-# Description label
-description = tk.Label(
-    root,
-    text="Enter Principal, Time (years) and Rate (%)\nto calculate Simple and Compound Interest",
-    bg="#f2f2f2"
-)
-description.pack(pady=5)
-
-# Frame for inputs
-frame = tk.Frame(root, bg="#f2f2f2")
-frame.pack(pady=15)
-
-# Principal
-label_principal = tk.Label(frame, text="Principal:", bg="#f2f2f2")
-label_principal.grid(row=0, column=0, padx=10, pady=5)
-
-entry_principal = tk.Entry(frame)
-entry_principal.grid(row=0, column=1, padx=10, pady=5)
-
-# Time
-label_time = tk.Label(frame, text="Time (years):", bg="#f2f2f2")
-label_time.grid(row=1, column=0, padx=10, pady=5)
-
-entry_time = tk.Entry(frame)
-entry_time.grid(row=1, column=1, padx=10, pady=5)
-
-# Rate
-label_rate = tk.Label(frame, text="Rate (%):", bg="#f2f2f2")
-label_rate.grid(row=2, column=0, padx=10, pady=5)
-
-entry_rate = tk.Entry(frame)
-entry_rate.grid(row=2, column=1, padx=10, pady=5)
-
-# Calculate button
-calculate_btn = tk.Button(root, text="Calculate Interest", command=calculate_interest, bg="#4CAF50", fg="white")
-calculate_btn.pack(pady=10)
-
-# Result labels
-label_si_result = tk.Label(root, text="Simple Interest: ", font=("Arial", 11), bg="#f2f2f2")
-label_si_result.pack(pady=5)
-
-label_ci_result = tk.Label(root, text="Compound Interest: ", font=("Arial", 11), bg="#f2f2f2")
-label_ci_result.pack(pady=5)
-
-# Run application
-root.mainloop()
+window.mainloop()
